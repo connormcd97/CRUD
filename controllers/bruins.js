@@ -1,17 +1,19 @@
 const express = require('express');
-const router  = express.Router();
+const router = express.Router();
 
 
-const Bruins= require('../models/bruins');
+const Bruins = require('../models/bruins');
 router.get('/', (req, res) => {
 
   Bruins.find({}, (err, allBruins) => {
-    if(err){
+    if (err) {
       console.log(err);
     } else {
       console.log(allBruins)
 
-      res.render('index.ejs', {bruins: allBruins});
+      res.render('index.ejs', {
+        bruins: allBruins
+      });
     }
   });
 
@@ -33,9 +35,9 @@ router.get('/:id', (req, res) => {
 
   Bruins.findById(req.params.id, (err, foundBruins) => {
 
-      res.render('show.ejs', {
-        bruins: foundBruins
-      });
+    res.render('show.ejs', {
+      bruins: foundBruins
+    });
   });
 });
 
@@ -43,7 +45,7 @@ router.get('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
 
   Bruins.findByIdAndRemove(req.params.id, (err, deletedBruin) => {
-      res.redirect('/bruins')
+    res.redirect('/bruins')
   });
 });
 
@@ -55,31 +57,31 @@ router.put('/:id', (req, res) => {
 });
 
 
-  router.post('/', (req, res) => {
+router.post('/', (req, res) => {
 
-    Bruins.create(req.body, (err, createdBruin) => {
+  Bruins.create(req.body, (err, createdBruin) => {
 
-      if(err){
-        console.log(err)
-      } else {
-        res.redirect('/bruins')
-      }
-    });
-
-  });
-
-
-
-  router.put('/:id', (req, res)=>{
-    Bruins.findByIdAndUpdate(req.params.id, req.query, ()=>{
-      res.redirect('/bruins');
-    });
-  });
-  router.delete('/:id', (req, res) => {
-    Bruins.findOneAndDelete(req.params.id, (err, deleted) => {
+    if (err) {
+      console.log(err)
+    } else {
       res.redirect('/bruins')
-    })
+    }
   });
 
+});
 
-  module.exports = router;
+
+
+router.put('/:id', (req, res) => {
+  Bruins.findByIdAndUpdate(req.params.id, req.query, () => {
+    res.redirect('/bruins');
+  });
+});
+router.delete('/:id', (req, res) => {
+  Bruins.findOneAndDelete(req.params.id, (err, deleted) => {
+    res.redirect('/bruins')
+  })
+});
+
+
+module.exports = router;
